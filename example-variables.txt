@@ -1,0 +1,144 @@
+// TFT_eSPI Simulator - Variable Declaration Test
+// This example demonstrates C++ style variable declarations
+
+// ==============================================
+// Define Layout Variables
+// ==============================================
+int margin = 15;
+int spacing = 10;
+int headerHeight = 40;
+int cardRadius = 10;
+
+// ==============================================
+// Calculate Derived Values
+// ==============================================
+int contentWidth = WIDTH - (margin * 2);
+int contentX = margin;
+int contentY = headerHeight + spacing;
+
+// Button dimensions
+int buttonWidth = 120;
+int buttonHeight = 45;
+int buttonSpacing = 10;
+
+// ==============================================
+// Color Variables (using RGB565 hex values)
+// ==============================================
+uint16_t bgColor = 0x0000;        // Black
+uint16_t headerColor = 0x001F;    // Blue
+uint16_t cardColor = 0x2945;      // Dark Gray
+
+// ==============================================
+// Draw Background
+// ==============================================
+tft.fillScreen(bgColor);
+
+// ==============================================
+// Draw Header
+// ==============================================
+tft.fillRect(0, 0, WIDTH, headerHeight, headerColor);
+
+// Header text
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(2);
+tft.drawString("Variable Demo", margin, 12);
+
+// Status indicators
+int indicatorY = headerHeight / 2;
+int indicator1X = WIDTH - 25;
+int indicator2X = WIDTH - 50;
+int indicator3X = WIDTH - 75;
+
+tft.fillCircle(indicator1X, indicatorY, 7, TFT_GREEN);
+tft.fillCircle(indicator2X, indicatorY, 7, TFT_YELLOW);
+tft.fillCircle(indicator3X, indicatorY, 7, TFT_RED);
+
+// ==============================================
+// Draw Info Cards
+// ==============================================
+int card1Y = contentY;
+int card2Y = card1Y + 90 + spacing;
+int card3Y = card2Y + 90 + spacing;
+
+// Card 1 - Temperature
+tft.fillRoundRect(contentX, card1Y, contentWidth, 90, cardRadius, cardColor);
+tft.setTextColor(TFT_CYAN);
+tft.setTextSize(1);
+tft.drawString("Temperature", contentX + 15, card1Y + 15);
+tft.setTextColor(TFT_YELLOW);
+tft.setTextSize(3);
+tft.drawString("24.5 C", contentX + 15, card1Y + 40);
+
+// Card 2 - Humidity
+tft.fillRoundRect(contentX, card2Y, contentWidth, 90, cardRadius, cardColor);
+tft.setTextColor(TFT_CYAN);
+tft.setTextSize(1);
+tft.drawString("Humidity", contentX + 15, card2Y + 15);
+tft.setTextColor(TFT_GREEN);
+tft.setTextSize(3);
+tft.drawString("65 %", contentX + 15, card2Y + 40);
+
+// Card 3 - Pressure
+tft.fillRoundRect(contentX, card3Y, contentWidth, 90, cardRadius, cardColor);
+tft.setTextColor(TFT_CYAN);
+tft.setTextSize(1);
+tft.drawString("Pressure", contentX + 15, card3Y + 15);
+tft.setTextColor(TFT_MAGENTA);
+tft.setTextSize(3);
+tft.drawString("1013", contentX + 15, card3Y + 40);
+
+// ==============================================
+// Draw Progress Bar
+// ==============================================
+int progressY = HEIGHT - 100;
+int progressHeight = 25;
+float progressValue = 0.75;
+
+// Progress bar background
+tft.drawRoundRect(contentX, progressY, contentWidth, progressHeight, 5, TFT_WHITE);
+
+// Progress fill
+int progressFillWidth = (contentWidth - 4) * progressValue;
+tft.fillRoundRect(contentX + 2, progressY + 2, progressFillWidth, progressHeight - 4, 4, TFT_GREEN);
+
+// Progress label
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(1);
+int progressPercent = progressValue * 100;
+tft.drawString("Progress:", contentX, progressY - 18);
+
+// ==============================================
+// Draw Control Buttons
+// ==============================================
+int buttonY = HEIGHT - 60;
+
+// Calculate button positions
+int leftButtonX = contentX;
+int rightButtonX = WIDTH - buttonWidth - margin;
+
+// Left button (Red - OFF)
+tft.fillRoundRect(leftButtonX, buttonY, buttonWidth, buttonHeight, 8, TFT_RED);
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(2);
+int leftTextX = leftButtonX + (buttonWidth / 2) - 20;
+tft.drawString("OFF", leftTextX, buttonY + 15);
+
+// Right button (Green - ON)
+tft.fillRoundRect(rightButtonX, buttonY, buttonWidth, buttonHeight, 8, TFT_GREEN);
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(2);
+int rightTextX = rightButtonX + (buttonWidth / 2) - 15;
+tft.drawString("ON", rightTextX, buttonY + 15);
+
+// ==============================================
+// Draw Footer
+// ==============================================
+int footerY = HEIGHT - 12;
+tft.setTextColor(TFT_LIGHTGRAY);
+tft.setTextSize(1);
+tft.drawString("All values calculated with variables", margin, footerY);
+
+// Draw decorative corner accents using variables
+int accentSize = 15;
+tft.drawLine(0, headerHeight, accentSize, headerHeight, TFT_CYAN);
+tft.drawLine(WIDTH - accentSize, headerHeight, WIDTH, headerHeight, TFT_CYAN);

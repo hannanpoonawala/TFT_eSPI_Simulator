@@ -273,25 +273,39 @@ class TFTSimulator {
     }
 
     loadExample() {
-        const example = `// TFT_eSPI Example - Colorful UI Demo
+        const example = `// TFT_eSPI Example - Colorful UI Demo with Variables
 // Use WIDTH and HEIGHT constants for display dimensions
-// Mathematical operations work: WIDTH - 20, HEIGHT / 2, etc.
+// Declare your own variables using C++ syntax
+
+// Define some variables for reusability
+int margin = 10;
+int headerHeight = 30;
+int buttonWidth = 100;
+int buttonHeight = 40;
+int cardRadius = 8;
+
+// Calculate positions
+int contentY = headerHeight + margin;
+int contentWidth = WIDTH - (margin * 2);
+int buttonY = 180;
+int rightButtonX = WIDTH - buttonWidth - margin;
 
 // Fill background
 tft.fillScreen(TFT_BLACK);
 
-// Draw header bar (full width, 30px tall)
-tft.fillRect(0, 0, WIDTH, 30, TFT_BLUE);
+// Draw header bar using variables
+tft.fillRect(0, 0, WIDTH, headerHeight, TFT_BLUE);
 tft.setTextColor(TFT_WHITE);
 tft.setTextSize(2);
-tft.drawString("TFT Display", 10, 8);
+tft.drawString("TFT Display", margin, 8);
 
 // Draw status indicators (positioned from right edge)
-tft.fillCircle(WIDTH - 20, 15, 6, TFT_GREEN);
-tft.fillCircle(WIDTH - 40, 15, 6, TFT_YELLOW);
+int indicatorY = headerHeight / 2;
+tft.fillCircle(WIDTH - 20, indicatorY, 6, TFT_GREEN);
+tft.fillCircle(WIDTH - 40, indicatorY, 6, TFT_YELLOW);
 
-// Draw main content area (with margins using WIDTH - 20)
-tft.fillRoundRect(10, 40, WIDTH - 20, 100, 8, TFT_DARKGRAY);
+// Draw main content area using calculated variables
+tft.fillRoundRect(margin, contentY, contentWidth, 100, cardRadius, TFT_DARKGRAY);
 
 // Draw text content
 tft.setTextColor(TFT_CYAN);
@@ -302,39 +316,47 @@ tft.setTextColor(TFT_YELLOW);
 tft.setTextSize(3);
 tft.drawString("25.5 C", 20, 75);
 
-// Draw progress bar (full width with margins)
-tft.drawRect(10, 150, WIDTH - 20, 20, TFT_WHITE);
-tft.fillRect(12, 152, (WIDTH - 24) * 0.65, 16, TFT_GREEN);
+// Draw progress bar using variables
+int progressY = 150;
+int progressHeight = 20;
+float progressPercent = 0.65;
 
-// Draw buttons (one left, one right)
-tft.fillRoundRect(10, 180, 100, 40, 5, TFT_RED);
-tft.fillRoundRect(WIDTH - 110, 180, 100, 40, 5, TFT_GREEN);
+tft.drawRect(margin, progressY, contentWidth, progressHeight, TFT_WHITE);
+tft.fillRect(margin + 2, progressY + 2, (contentWidth - 4) * progressPercent, progressHeight - 4, TFT_GREEN);
+
+// Draw buttons using pre-calculated positions
+tft.fillRoundRect(margin, buttonY, buttonWidth, buttonHeight, 5, TFT_RED);
+tft.fillRoundRect(rightButtonX, buttonY, buttonWidth, buttonHeight, 5, TFT_GREEN);
 
 tft.setTextColor(TFT_WHITE);
 tft.setTextSize(2);
-tft.drawString("OFF", 35, 193);
-tft.drawString("ON", WIDTH - 75, 193);
+tft.drawString("OFF", margin + 25, buttonY + 13);
+tft.drawString("ON", rightButtonX + 30, buttonY + 13);
 
 // Draw decorative line at bottom
-tft.drawLine(0, HEIGHT - 40, WIDTH, HEIGHT - 40, TFT_BLUE);
+int footerY = HEIGHT - 40;
+tft.drawLine(0, footerY, WIDTH, footerY, TFT_BLUE);
 
 // Draw footer text
 tft.setTextColor(TFT_LIGHTGRAY);
 tft.setTextSize(1);
-tft.drawString("System Status: OK", 10, HEIGHT - 30);
+tft.drawString("System Status: OK", margin, HEIGHT - 30);
 
-// Draw shapes demonstration (positioned relative to bottom)
-tft.drawCircle(50, HEIGHT - 80, 20, TFT_MAGENTA);
-tft.fillTriangle(120, HEIGHT - 60, 100, HEIGHT - 100, 140, HEIGHT - 100, TFT_ORANGE);
-tft.drawRect(160, HEIGHT - 100, 40, 40, TFT_CYAN);
+// Draw shapes demonstration using variables
+int shapeY = HEIGHT - 80;
+tft.drawCircle(50, shapeY, 20, TFT_MAGENTA);
+tft.fillTriangle(120, shapeY + 20, 100, shapeY - 20, 140, shapeY - 20, TFT_ORANGE);
+tft.drawRect(160, shapeY - 20, 40, 40, TFT_CYAN);
 
 // Centered rectangle demonstration
-tft.fillRect(WIDTH / 2 - 30, HEIGHT / 2 - 20, 60, 40, TFT_PURPLE);
+int centerX = WIDTH / 2;
+int centerY = HEIGHT / 2;
+tft.fillRect(centerX - 30, centerY - 20, 60, 40, TFT_PURPLE);
 `;
 
         this.codeEditor.value = example;
         this.updateLineCount();
-        this.log('Example code loaded', 'success');
+        this.log('Example code loaded with variable declarations', 'success');
     }
 
     saveCode() {

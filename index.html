@@ -18,6 +18,60 @@
         <div class="main-content">
             <!-- Left Panel: Controls and Editor -->
             <div class="left-panel">
+                
+
+                <!-- Code Editor -->
+                <section class="editor-panel">
+                    <div class="editor-header">
+                        <h3>Code Editor</h3>
+                        <div class="editor-actions">
+                            <button id="loadExample" class="btn btn-small">Load Example</button>
+                            <button id="clearCode" class="btn btn-small">Clear</button>
+                            <button id="saveCode" class="btn btn-small">Save</button>
+                            <button id="loadCode" class="btn btn-small">Load</button>
+                        </div>
+                    </div>
+                    
+                    <textarea id="codeEditor" spellcheck="false" placeholder="// Write your TFT_eSPI code here...
+// Example:
+tft.fillScreen(TFT_BLACK);
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(2);
+tft.drawString(&quot;Hello World!&quot;, 10, 10);"></textarea>
+                    
+                    <div class="editor-footer">
+                        <button id="renderBtn" class="btn btn-success">▶ Render</button>
+                        <span class="line-count">Lines: <span id="lineCount">0</span></span>
+                    </div>
+                </section>
+
+                <!-- Console -->
+                <section class="console-panel">
+                    <div class="console-header">
+                        <h3>Console</h3>
+                        <button id="clearConsole" class="btn btn-small">Clear</button>
+                    </div>
+                    <div id="console" class="console-output"></div>
+                </section>
+            </div>
+
+            <!-- Right Panel: Display and Console -->
+            <div class="right-panel">
+                <!-- Display -->
+                <section class="display-panel">
+                    <div class="display-header">
+                        <h3>Display Preview</h3>
+                        <div class="display-info">
+                            <span id="displayInfo">240 x 320 px</span>
+                        </div>
+                    </div>
+                    
+                    <div class="canvas-container" id="canvasContainer">
+                        <canvas id="tftCanvas"></canvas>
+                        <canvas id="gridCanvas"></canvas>
+                    </div>
+                </section>
+
                 <!-- Display Settings -->
                 <section class="settings-panel">
                     <h3>Display Settings</h3>
@@ -63,31 +117,6 @@
                     </div>
                 </section>
 
-                <!-- Code Editor -->
-                <section class="editor-panel">
-                    <div class="editor-header">
-                        <h3>Code Editor</h3>
-                        <div class="editor-actions">
-                            <button id="loadExample" class="btn btn-small">Load Example</button>
-                            <button id="clearCode" class="btn btn-small">Clear</button>
-                            <button id="saveCode" class="btn btn-small">Save</button>
-                            <button id="loadCode" class="btn btn-small">Load</button>
-                        </div>
-                    </div>
-                    
-                    <textarea id="codeEditor" spellcheck="false" placeholder="// Write your TFT_eSPI code here...
-// Example:
-tft.fillScreen(TFT_BLACK);
-tft.setTextColor(TFT_WHITE);
-tft.setTextSize(2);
-tft.drawString(&quot;Hello World!&quot;, 10, 10);"></textarea>
-                    
-                    <div class="editor-footer">
-                        <button id="renderBtn" class="btn btn-success">▶ Render</button>
-                        <span class="line-count">Lines: <span id="lineCount">0</span></span>
-                    </div>
-                </section>
-
                 <!-- Syntax Helper -->
                 <section class="helper-panel">
                     <details>
@@ -112,43 +141,28 @@ tft.drawString(&quot;Hello World!&quot;, 10, 10);"></textarea>
                                 <li><code>tft.println("text")</code> - Print text at cursor and move down</li>
                             </ul>
                             
+                            <h4>Variable Declarations (C++ Style):</h4>
+                            <ul>
+                                <li><code>int varName = value;</code> - Integer variable</li>
+                                <li><code>float varName = value;</code> - Floating point variable</li>
+                                <li><code>double varName = value;</code> - Double precision variable</li>
+                                <li><code>uint8_t varName = value;</code> - Unsigned 8-bit integer</li>
+                                <li><code>uint16_t varName = value;</code> - Unsigned 16-bit integer</li>
+                                <li><code>uint32_t varName = value;</code> - Unsigned 32-bit integer</li>
+                            </ul>
+                            <p><strong>Examples:</strong> <code>int margin = 10;</code> <code>float progress = 0.65;</code></p>
+                            
                             <h4>Predefined Colors:</h4>
                             <p>TFT_BLACK, TFT_WHITE, TFT_RED, TFT_GREEN, TFT_BLUE, TFT_YELLOW, TFT_CYAN, TFT_MAGENTA, TFT_ORANGE, TFT_PURPLE, TFT_PINK, TFT_BROWN, TFT_GRAY, TFT_DARKGRAY, TFT_LIGHTGRAY</p>
                             
                             <h4>Custom Colors:</h4>
                             <p>Use 16-bit hex: <code>0xF800</code> (red) or RGB565 format</p>
                             
-                            <h4>Variables:</h4>
-                            <p>Use <code>WIDTH</code> and <code>HEIGHT</code> for display dimensions</p>
+                            <h4>Constants & Variables:</h4>
+                            <p><code>WIDTH</code> and <code>HEIGHT</code> - Display dimensions</p>
+                            <p>You can use variables in expressions: <code>WIDTH - margin * 2</code></p>
                         </div>
                     </details>
-                </section>
-            </div>
-
-            <!-- Right Panel: Display and Console -->
-            <div class="right-panel">
-                <!-- Display -->
-                <section class="display-panel">
-                    <div class="display-header">
-                        <h3>Display Preview</h3>
-                        <div class="display-info">
-                            <span id="displayInfo">240 x 320 px</span>
-                        </div>
-                    </div>
-                    
-                    <div class="canvas-container" id="canvasContainer">
-                        <canvas id="tftCanvas"></canvas>
-                        <canvas id="gridCanvas"></canvas>
-                    </div>
-                </section>
-
-                <!-- Console -->
-                <section class="console-panel">
-                    <div class="console-header">
-                        <h3>Console</h3>
-                        <button id="clearConsole" class="btn btn-small">Clear</button>
-                    </div>
-                    <div id="console" class="console-output"></div>
                 </section>
             </div>
         </div>

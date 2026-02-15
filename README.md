@@ -169,6 +169,65 @@ tft.setTextSize(2);
 tft.drawString("STOP", 25, 162);
 ```
 
+### Using C++ Variables for Better Code Organization
+```cpp
+// Define all layout variables at the top
+int margin = 10;
+int headerHeight = 30;
+int cardRadius = 8;
+int buttonWidth = 100;
+int buttonHeight = 40;
+
+// Calculate derived values
+int contentWidth = WIDTH - (margin * 2);
+int contentY = headerHeight + margin;
+int cardHeight = 100;
+
+// Background
+tft.fillScreen(TFT_BLACK);
+
+// Header bar with variables
+tft.fillRect(0, 0, WIDTH, headerHeight, TFT_BLUE);
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(2);
+tft.drawString("Dashboard", margin, 8);
+
+// Status indicator positioned with variables
+int indicatorY = headerHeight / 2;
+tft.fillCircle(WIDTH - 20, indicatorY, 6, TFT_GREEN);
+
+// Content card using all calculated values
+tft.fillRoundRect(margin, contentY, contentWidth, cardHeight, cardRadius, TFT_DARKGRAY);
+
+// Temperature display
+tft.setTextColor(TFT_CYAN);
+tft.setTextSize(1);
+tft.drawString("Temperature:", margin + 10, contentY + 10);
+
+tft.setTextColor(TFT_YELLOW);
+tft.setTextSize(3);
+tft.drawString("23.5 C", margin + 10, contentY + 30);
+
+// Buttons with calculated positions
+int buttonY = contentY + cardHeight + margin;
+int rightButtonX = WIDTH - buttonWidth - margin;
+
+tft.fillRoundRect(margin, buttonY, buttonWidth, buttonHeight, 5, TFT_RED);
+tft.fillRoundRect(rightButtonX, buttonY, buttonWidth, buttonHeight, 5, TFT_GREEN);
+
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(2);
+tft.drawString("OFF", margin + 25, buttonY + 13);
+tft.drawString("ON", rightButtonX + 30, buttonY + 13);
+```
+
+**Benefits of Using Variables:**
+- ✅ Easier to maintain and modify layouts
+- ✅ Change margins/spacing in one place
+- ✅ More readable and self-documenting code
+- ✅ Matches real microcontroller C++ code structure
+- ✅ Consistent spacing and alignment
+
 ### Using WIDTH and HEIGHT
 ```cpp
 // Center a rectangle on screen
@@ -191,6 +250,70 @@ tft.drawLine(0, HEIGHT - 30, WIDTH, HEIGHT - 30, TFT_BLUE);  // Bottom line
 
 // Complex expressions work too
 tft.fillRect(WIDTH * 0.25, HEIGHT * 0.25, WIDTH * 0.5, HEIGHT * 0.5, TFT_YELLOW);
+```
+
+### C++ Variable Declarations
+
+Declare your own variables using C++ syntax for cleaner, more maintainable code:
+
+```cpp
+// Integer variables
+int margin = 10;
+int headerHeight = 30;
+int buttonWidth = 100;
+
+// Floating point variables
+float progress = 0.75;
+double scale = 1.5;
+
+// Unsigned integer types (common in embedded systems)
+uint8_t brightness = 255;
+uint16_t color = 0xF800;
+uint32_t timestamp = 1000;
+
+// Use variables in calculations
+int contentWidth = WIDTH - (margin * 2);
+int centerX = WIDTH / 2;
+int rightEdge = WIDTH - buttonWidth - margin;
+
+// Use variables in TFT commands
+tft.fillRect(margin, margin, contentWidth, headerHeight, TFT_BLUE);
+tft.fillCircle(centerX, HEIGHT / 2, 30, TFT_RED);
+```
+
+**Supported Variable Types:**
+- `int` - Integer
+- `float` - Floating point
+- `double` - Double precision
+- `uint8_t` - Unsigned 8-bit integer (0-255)
+- `uint16_t` - Unsigned 16-bit integer (0-65535)
+- `uint32_t` - Unsigned 32-bit integer
+- `long` - Long integer
+- `short` - Short integer
+- `byte` - Byte (alias for uint8_t)
+
+**Variable Usage Examples:**
+```cpp
+// Define layout variables
+int margin = 10;
+int spacing = 5;
+int cardWidth = WIDTH - (margin * 2);
+int cardHeight = 80;
+
+// Calculate positions
+int card1Y = 40;
+int card2Y = card1Y + cardHeight + spacing;
+int card3Y = card2Y + cardHeight + spacing;
+
+// Draw cards using variables
+tft.fillRoundRect(margin, card1Y, cardWidth, cardHeight, 5, TFT_BLUE);
+tft.fillRoundRect(margin, card2Y, cardWidth, cardHeight, 5, TFT_GREEN);
+tft.fillRoundRect(margin, card3Y, cardWidth, cardHeight, 5, TFT_RED);
+
+// Use variables for color values
+uint16_t primaryColor = 0x001F;  // Blue
+uint16_t secondaryColor = 0xF800; // Red
+tft.fillRect(0, 0, WIDTH, 30, primaryColor);
 ```
 
 ### Mathematical Operations
@@ -216,6 +339,10 @@ tft.drawString("Text", WIDTH - 80, 10);
 
 // Percentage-based sizing
 tft.fillRect(0, 0, WIDTH * 0.75, 50, TFT_BLUE);
+
+// Using variables in expressions
+int margin = 10;
+tft.fillRect(margin, margin, WIDTH - margin * 2, HEIGHT - margin * 2, TFT_BLUE);
 ```
 
 ## ⌨️ Keyboard Shortcuts

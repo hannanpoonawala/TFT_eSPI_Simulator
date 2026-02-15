@@ -95,9 +95,11 @@ class TFTParser {
      * Parse and execute TFT_eSPI commands
      */
     parse(code, width, height) {
-        // Replace WIDTH and HEIGHT constants
-        code = code.replace(/\bWIDTH\b/g, width.toString());
-        code = code.replace(/\bHEIGHT\b/g, height.toString());
+        // Initialize variables map with WIDTH and HEIGHT
+        this.variables = {
+            WIDTH: width,
+            HEIGHT: height
+        };
         
         // Split code into lines
         const lines = code.split('\n');
@@ -128,6 +130,24 @@ class TFTParser {
         // Remove semicolon if present
         line = line.replace(/;$/, '').trim();
         
+        // Check for variable declarations (int, float, double, uint8_t, uint16_t, etc.)
+        const varDeclMatch = line.match(/^(int|float|double|uint8_t|uint16_t|uint32_t|long|short|byte)\s+(\w+)\s*=\s*(.+)$/);
+        if (varDeclMatch) {
+            const varName = varDeclMatch[2];
+            const varValue = varDeclMatch[3];
+            this.variables[varName] = this.evaluateExpression(this.replaceVariables(varValue));
+            return;
+        }
+        
+        // Check for variable assignments (without type declaration)
+        const varAssignMatch = line.match(/^(\w+)\s*=\s*(.+)$/);
+        if (varAssignMatch && !line.includes('tft.')) {
+            const varName = varAssignMatch[1];
+            const varValue = varAssignMatch[2];
+            this.variables[varName] = this.evaluateExpression(this.replaceVariables(varValue));
+            return;
+        }
+        
         // Match tft.command(args) pattern
         const match = line.match(/tft\.(\w+)\((.*)\)/);
         
@@ -139,7 +159,7 @@ class TFTParser {
         const command = match[1];
         const argsString = match[2];
         
-        // Parse arguments
+        // Parse arguments (with variable substitution)
         const args = this.parseArguments(argsString);
         
         // Execute the appropriate command
@@ -192,6 +212,20 @@ class TFTParser {
             default:
                 throw new Error(`Unknown command: ${command}`);
         }
+    }
+
+    /**
+     * Replace variable names with their values in an expression
+     */
+    replaceVariables(expr) {
+        let result = expr;
+        // Replace variables in order of length (longest first to avoid partial matches)
+        const sortedVars = Object.keys(this.variables).sort((a, b) => b.length - a.length);
+        for (const varName of sortedVars) {
+            const regex = new RegExp('\\b' + varName + '\\b', 'g');
+            result = result.replace(regex, this.variables[varName].toString());
+        }
+        return result;
     }
 
     /**
@@ -267,11 +301,16 @@ class TFTParser {
             return parseInt(value, 16);
         }
         
-        // Check if it's a mathematical expression (contains operators)
-        if (/[+\-*\/()]/.test(value)) {
+        // Check if it contains variables or mathematical expressions
+        const hasVariables = Object.keys(this.variables).some(varName => 
+            new RegExp('\\b' + varName + '\\b').test(value)
+        );
+        
+        if (hasVariables || /[+\-*\/()]/.test(value)) {
             try {
-                // Safely evaluate the expression
-                return this.evaluateExpression(value);
+                // Replace variables and evaluate the expression
+                const replaced = this.replaceVariables(value);
+                return this.evaluateExpression(replaced);
             } catch (e) {
                 // If evaluation fails, try parsing as number
                 const num = parseFloat(value);
