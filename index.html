@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFT_eSPI Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🖥️ TFT_eSPI Simulator</h1>
+            <p>Fast UI prototyping for TFT displays - No flashing required!</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel: Controls and Editor -->
+            <div class="left-panel">
+                <!-- Display Settings -->
+                <section class="settings-panel">
+                    <h3>Display Settings</h3>
+                    
+                    <div class="settings-row">
+                        <div class="input-group">
+                            <label for="width">Width (px):</label>
+                            <input type="number" id="width" value="240" min="1" max="1920">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="height">Height (px):</label>
+                            <input type="number" id="height" value="320" min="1" max="1920">
+                        </div>
+                        
+                        <button id="applyDimensions" class="btn btn-primary">Apply</button>
+                    </div>
+
+                    <div class="presets">
+                        <label>Presets:</label>
+                        <button class="btn btn-small" data-preset="240,320">240x320</button>
+                        <button class="btn btn-small" data-preset="320,240">320x240</button>
+                        <button class="btn btn-small" data-preset="135,240">135x240</button>
+                        <button class="btn btn-small" data-preset="128,160">128x160</button>
+                        <button class="btn btn-small" data-preset="480,320">480x320</button>
+                    </div>
+
+                    <div class="options-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="showGrid">
+                            Show Grid
+                        </label>
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="livePreview">
+                            Live Preview
+                        </label>
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="autoRotate">
+                            Auto-fit
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Code Editor -->
+                <section class="editor-panel">
+                    <div class="editor-header">
+                        <h3>Code Editor</h3>
+                        <div class="editor-actions">
+                            <button id="loadExample" class="btn btn-small">Load Example</button>
+                            <button id="clearCode" class="btn btn-small">Clear</button>
+                            <button id="saveCode" class="btn btn-small">Save</button>
+                            <button id="loadCode" class="btn btn-small">Load</button>
+                        </div>
+                    </div>
+                    
+                    <textarea id="codeEditor" spellcheck="false" placeholder="// Write your TFT_eSPI code here...
+// Example:
+tft.fillScreen(TFT_BLACK);
+tft.setTextColor(TFT_WHITE);
+tft.setTextSize(2);
+tft.drawString(&quot;Hello World!&quot;, 10, 10);"></textarea>
+                    
+                    <div class="editor-footer">
+                        <button id="renderBtn" class="btn btn-success">▶ Render</button>
+                        <span class="line-count">Lines: <span id="lineCount">0</span></span>
+                    </div>
+                </section>
+
+                <!-- Syntax Helper -->
+                <section class="helper-panel">
+                    <details>
+                        <summary>📖 Syntax Helper</summary>
+                        <div class="syntax-help">
+                            <h4>Supported Commands:</h4>
+                            <ul>
+                                <li><code>tft.fillScreen(color)</code> - Fill entire screen</li>
+                                <li><code>tft.fillRect(x, y, w, h, color)</code> - Draw filled rectangle</li>
+                                <li><code>tft.drawRect(x, y, w, h, color)</code> - Draw rectangle outline</li>
+                                <li><code>tft.drawLine(x0, y0, x1, y1, color)</code> - Draw line</li>
+                                <li><code>tft.drawCircle(x, y, r, color)</code> - Draw circle outline</li>
+                                <li><code>tft.fillCircle(x, y, r, color)</code> - Draw filled circle</li>
+                                <li><code>tft.drawRoundRect(x, y, w, h, r, color)</code> - Draw rounded rectangle</li>
+                                <li><code>tft.fillRoundRect(x, y, w, h, r, color)</code> - Draw filled rounded rectangle</li>
+                                <li><code>tft.drawTriangle(x0, y0, x1, y1, x2, y2, color)</code> - Draw triangle</li>
+                                <li><code>tft.fillTriangle(x0, y0, x1, y1, x2, y2, color)</code> - Draw filled triangle</li>
+                                <li><code>tft.drawString("text", x, y)</code> - Draw text</li>
+                                <li><code>tft.setTextColor(color)</code> - Set text color</li>
+                                <li><code>tft.setTextSize(size)</code> - Set text size (1-10)</li>
+                                <li><code>tft.setCursor(x, y)</code> - Set cursor position</li>
+                                <li><code>tft.println("text")</code> - Print text at cursor and move down</li>
+                            </ul>
+                            
+                            <h4>Predefined Colors:</h4>
+                            <p>TFT_BLACK, TFT_WHITE, TFT_RED, TFT_GREEN, TFT_BLUE, TFT_YELLOW, TFT_CYAN, TFT_MAGENTA, TFT_ORANGE, TFT_PURPLE, TFT_PINK, TFT_BROWN, TFT_GRAY, TFT_DARKGRAY, TFT_LIGHTGRAY</p>
+                            
+                            <h4>Custom Colors:</h4>
+                            <p>Use 16-bit hex: <code>0xF800</code> (red) or RGB565 format</p>
+                            
+                            <h4>Variables:</h4>
+                            <p>Use <code>WIDTH</code> and <code>HEIGHT</code> for display dimensions</p>
+                        </div>
+                    </details>
+                </section>
+            </div>
+
+            <!-- Right Panel: Display and Console -->
+            <div class="right-panel">
+                <!-- Display -->
+                <section class="display-panel">
+                    <div class="display-header">
+                        <h3>Display Preview</h3>
+                        <div class="display-info">
+                            <span id="displayInfo">240 x 320 px</span>
+                        </div>
+                    </div>
+                    
+                    <div class="canvas-container" id="canvasContainer">
+                        <canvas id="tftCanvas"></canvas>
+                        <canvas id="gridCanvas"></canvas>
+                    </div>
+                </section>
+
+                <!-- Console -->
+                <section class="console-panel">
+                    <div class="console-header">
+                        <h3>Console</h3>
+                        <button id="clearConsole" class="btn btn-small">Clear</button>
+                    </div>
+                    <div id="console" class="console-output"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="tft-parser.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
